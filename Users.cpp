@@ -3,11 +3,12 @@ Kailyn Vu, Jaime Organista,  Jared Yalung
 CMPR 131 - Fall 2025
 November 23, 2025
 Final Project 2 ,
-Collaboration: STARTING OUT WITH C++, Geeksforgeeks.org
+Collaboration: STARTING OUT WITH C++, Geeksforgeeks.org, Victoria from the MESA Center
 */
 
-//#include "Users.h"
+
 #include "Bank.h"
+//This data structure makes sure each ID is unique
 unordered_set<int> allIDS;
 Users::Users(string n, double b)
 {
@@ -46,12 +47,14 @@ Users::Users(string n, double b)
 	
 }
 
+//Deposit to balance
 void Users::deposit(double amt)
 {
 	cout << "Deposit of $" << amt << endl;
 	balance += amt;
 }
 
+//Withdrawing from balance
 void Users::withdraw(double amt)
 {
 	if (balance - amt < 0)
@@ -65,6 +68,7 @@ void Users::withdraw(double amt)
 	}
 }
 
+//Accessor functions
 string Users::getName() const
 {
 	return name;
@@ -80,6 +84,7 @@ int Users::getID() const
 	return id;
 }
 
+//Display information
 void Users::displayInfo() const
 {
 	cout << "Name: " << name << endl;

@@ -3,7 +3,7 @@ Kailyn Vu, Jaime Organista,  Jared Yalung
 CMPR 131 - Fall 2025
 November 23, 2025
 Final Project 2 ,
-Collaboration: STARTING OUT WITH C++, Geeksforgeeks.org
+Collaboration: STARTING OUT WITH C++, Geeksforgeeks.org, Victoria from the MESA Center
 */
 
 #pragma once

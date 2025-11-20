@@ -3,12 +3,12 @@ Kailyn Vu, Jaime Organista,  Jared Yalung
 CMPR 131 - Fall 2025
 November 23, 2025
 Final Project 2 ,
-Collaboration: STARTING OUT WITH C++, Geeksforgeeks.org
+Collaboration: STARTING OUT WITH C++, Geeksforgeeks.org, Victoria from the MESA Center
 */
 
 #include "Bank.h"
 
-//Default constructor, accounts is initalized outside
+//Default constructor, accounts is initalized in header 
 Bank::Bank()
 {
 	
@@ -111,6 +111,7 @@ void Bank::depositToAccount(int id, double amt)
 
 }
 
+//Withdraws from account based on ID
 void Bank::withdrawFromAccount(int id, double amt)
 {
 	int low = 0;
@@ -145,6 +146,7 @@ void Bank::withdrawFromAccount(int id, double amt)
 	}
 }
 
+//Displays accounts in order of ID
 void Bank::displayAllAccounts()
 {
 	for (int i = 0; i < accounts.size(); i++)
@@ -153,7 +155,7 @@ void Bank::displayAllAccounts()
 	}
 }
 
-//Big 5
+//Big 5, no destructor since vector class has its own
 
 Bank::Bank(const Bank& other)
 {
