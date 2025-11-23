@@ -7,108 +7,197 @@ Collaboration: STARTING OUT WITH C++, Geeksforgeeks.org, Victoria from the MESA 
 */
 
 #include "Bank.h"
-#include "Users.h"
 
-int main()
+//Default constructor, accounts is initalized in header 
+Bank::Bank()
 {
-	//user defined account.
-	Bank bank8;
-	string name;
-	double balence;
-	cout << "Please Enter your name: ";
-	cin >> name;
-	cout << "Please enter your balence: ";
-	cin >> balence;
-	bank8.createAccount(name, balence);
-	cout << endl;
-
-	bank8.displayAllAccounts();
+	
+}
 
 
+//getID from accounts based on name for id based searching
+int Bank::findID(string n)
+{
+	for (int i = 0; i < accounts.size(); i++)
+	{
+		if (accounts.at(i).getName() == n)
+		{
+			return accounts.at(i).getID();
+		}
+	}
+	return -1;
+}
+
+void Bank::createAccount(string name, double deposit)
+{
+	//New user
+	Users newUser(name, deposit);
+	
+	//Search the accounts vector for the proper index to insert based on IDS
+	int l = 0, r = accounts.size()-1;
+	int m;
+	while (l <= r) {
+		m = l + (r - l) / 2;
+		if (accounts.at(m).getID() < newUser.getID())
+			l = m + 1;
+		else
+			r = m-1;
+	}
+	//insert
+	accounts.insert(accounts.begin() + l, newUser);
+}
+
+//Returns a pointer to User object
+Users* Bank::searchAccountById(int id)
+{
+	int low = 0;
+	int high = accounts.size() - 1;
+
+	while (low <= high)
+	{
+		int mid = low + (high - low) / 2;
+
+		if (accounts.at(mid).getID() == id)
+		{
+			return &accounts.at(mid);
+		}
+		if (accounts.at(mid).getID() < id)
+		{
+			low = mid + 1;
+		}
+		else
+		{
+			high = mid - 1;
+		}
+	}
+
+	return nullptr;
+
+}
+
+void Bank::depositToAccount(int id, double amt)
+{
+	
+	int low = 0;
+	int high = accounts.size() - 1;
+	int index = 0;
+	while (low <= high)
+	{
+		int mid = low + (high - low) / 2;
+
+		if (accounts.at(mid).getID() == id)
+		{
+			index = mid;
+		}
+		if (accounts.at(mid).getID() < id)
+		{
+			low = mid + 1;
+		}
+		else
+		{
+			high = mid - 1;
+		}
+	}
+	
+	if (id== accounts.at(index).getID())
+	{
+		accounts.at(index).deposit(amt);
+		
+	}
+	else
+	{
+		cout << "Account doesn't exist." << endl;
+	}
+
+}
+
+//Withdraws from account based on ID
+void Bank::withdrawFromAccount(int id, double amt)
+{
+	int low = 0;
+	int high = accounts.size() - 1;
+	int index = 0;
+	while (low <= high)
+	{
+		int mid = low + (high - low) / 2;
+
+		if (accounts.at(mid).getID() == id)
+		{
+			index = mid;
+		}
+		if (accounts.at(mid).getID() < id)
+		{
+			low = mid + 1;
+		}
+		else
+		{
+			high = mid - 1;
+		}
+	}
 
 
-	//Creating a bank obj and 2 adding accounts
-	Bank myBank;
-	cout << "Adding the following 2 accounts to the myBank object: " << endl;
-	myBank.createAccount("Jane", 100);
-	myBank.createAccount("John", 75);
+	if (id==accounts.at(index).getID())
+	{
+		accounts.at(index).withdraw(amt);
+	}
+	else
+	{
+		cout << "Account doesn't exist." << endl;
+	}
+}
 
-	cout << endl;
-	system("pause");
-	system("cls");
+//Displays accounts in order of ID
+void Bank::displayAllAccounts()
+{
+	for (int i = 0; i < accounts.size(); i++)
+	{
+		accounts.at(i).displayInfo();
+	}
+}
 
-	cout << "Here's their information from myBank: " << endl;
-	//Display initial info
-	myBank.displayAllAccounts();
+//Big 5, no destructor since vector class has its own
 
-	cout << endl;
-	system("pause");
-	system("cls");
+Bank::Bank(const Bank& other)
+{
+	for (int i = 0; i < other.accounts.size(); i++)
+	{
+		accounts.push_back(other.accounts.at(i));
+	}
+}
 
-	//Display just 1 account
-	cout << "\nJane's account before changing balance" << endl;
-	int janeId = myBank.findID("Jane");
-	myBank.searchAccountById(janeId)->displayInfo();
+Bank& Bank:: operator=(const Bank& other)
+{
+	if (this != &other)
+	{
+		accounts.clear();
+		for (int i = 0; i < other.accounts.size(); i++)
+		{
+			accounts.push_back(other.accounts.at(i));
+		}
+	}
+	else
+	{
+		cout << "No self assignment." << endl;
+	}
+	return *this;
+}
 
-	cout << "\n" << endl;
-	myBank.depositToAccount(janeId, 500);
-	myBank.searchAccountById(janeId)->displayInfo();
-	cout << "\n" << endl;
-	myBank.withdrawFromAccount(janeId, 250);
-	myBank.searchAccountById(janeId)->displayInfo();
+Bank::Bank(Bank&& other) noexcept
+{
+	accounts = other.accounts;
+	other.accounts.clear();
+}
 
-	cout << "\n" << endl;
-	cout << "Copy constructor - copying myBank to bank2:" << endl;
-	Bank bank2(myBank);
-	bank2.displayAllAccounts();
-	cout << "\n" << endl;
-
-	cout << "Copy assignment to bank3 from myBank: " << endl;
-	Bank bank3 = myBank;
-	bank3.displayAllAccounts();
-	cout << "\n" << endl;
-
-	cout << endl;
-	system("pause");
-	system("cls");
-
-	cout << "Creating bank4 object and adding 2 accounts: " << endl;
-	Bank bank4;
-	bank4.createAccount("Doe", 2);
-	bank4.createAccount("Roe", 7);
-
-
-	cout << "\n" << endl;
-	cout << "Move constructor moves bank4 to bank5: " << endl;
-	Bank bank5 = move(bank4);
-	bank5.displayAllAccounts();
-
-	cout << endl;
-	system("pause");
-	system("cls");
-
-	cout << "\n" << endl;
-	cout << "Creating bank6 object and adding 2 accounts: " << endl;
-	Bank bank6;
-	bank6.createAccount("James", 21);
-	bank6.createAccount("Judy", 67);
-	bank6.displayAllAccounts();
-
-	cout << "\n" << endl;
-	cout << "Move assignment - bank6 moved to bank7: " << endl;
-	Bank bank7;
-	bank7 = move(bank6);
-	bank7.displayAllAccounts();
-
-	cout << endl;
-	system("pause");
-
-	system("cls");
-
-	cout << "List of accounts on The bank: " << endl;
-	myBank.displayAllAccounts();
-	bank5.displayAllAccounts();
-	bank7.displayAllAccounts();
-	bank8.displayAllAccounts();
-
-	return 0;
+Bank& Bank::operator=(Bank&& other) noexcept
+{
+	if (this != &other)
+	{
+		accounts.clear();
+		accounts = other.accounts;
+	}
+	else
+	{
+		cout << "No self assignment." << endl;
+	}
+	return *this;
+}
